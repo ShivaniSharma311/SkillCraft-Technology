@@ -1,0 +1,81 @@
+import java.util.Scanner;
+
+public class Cipher {
+
+    // Function to encrypt or decrypt text
+    public static String caesarCipher(String message, int shift, boolean encrypt) {
+        StringBuilder result = new StringBuilder();
+
+        // For decryption, reverse the shift
+        if (!encrypt) {
+            shift = -shift;
+        }
+
+        // Go through each character
+        for (char ch : message.toCharArray()) {
+            if (Character.isLetter(ch)) {
+                char base = Character.isUpperCase(ch) ? 'A' : 'a';
+                char shiftedChar = (char) ((ch - base + shift + 26) % 26 + base);
+                result.append(shiftedChar);
+            } else {
+                // Leave numbers, spaces, punctuation unchanged
+                result.append(ch);
+            }
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Welcome message
+        System.out.println("Welcome to the Caesar Cipher Tool");
+        System.out.println("This program lets you encrypt or decrypt a message using a shift value.");
+        System.out.println("Let's begin.\n");
+
+        // Choose operation
+        String choice;
+        while (true) {
+            System.out.print("Would you like to Encrypt or Decrypt? (E/D): ");
+            choice = scanner.nextLine().trim().toUpperCase();
+
+            if (choice.equals("E") || choice.equals("D")) {
+                break;
+            } else {
+                System.out.println("Please enter 'E' for Encrypt or 'D' for Decrypt.");
+            }
+        }
+
+        // Enter message
+        System.out.print("Enter your message: ");
+        String message = scanner.nextLine();
+
+        // Enter shift value
+        int shift;
+        while (true) {
+            System.out.print("Enter the shift value (a whole number): ");
+            try {
+                shift = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("That doesn't seem to be a valid number. Please try again.");
+            }
+        }
+
+        // Perform encryption or decryption
+        boolean encrypt = choice.equals("E");
+        String result = caesarCipher(message, shift, encrypt);
+
+        // Display result
+        System.out.println("\nHere is your result:");
+        if (encrypt) {
+            System.out.println("Encrypted message: " + result);
+        } else {
+            System.out.println("Decrypted message: " + result);
+        }
+
+        System.out.println("\nThank you for using the Caesar Cipher Tool.");
+        scanner.close();
+    }
+}
