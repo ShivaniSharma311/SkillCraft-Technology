@@ -1,0 +1,36 @@
+import javax.swing.*;
+import java.awt.event.*;
+
+public class KeyPressListener {
+    public static void main(String[] args) {
+        // Create a window (frame) with a title
+        JFrame frame = new JFrame("Type Something - Key Listener Example");
+
+        // Create a text area where the user can type
+        JTextArea typingArea = new JTextArea("Start typing here...");
+        typingArea.setLineWrap(true);
+
+        // Add a key listener to respond to every key typed
+        typingArea.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // Get the character the user typed
+                char typedChar = e.getKeyChar();
+
+                // Print it to the console
+                System.out.println("You typed: " + typedChar);
+
+                // (Optional) You could also save this to a file *with user permission*
+            }
+        });
+
+        // Add the text area into a scroll pane in case text gets long
+        JScrollPane scrollPane = new JScrollPane(typingArea);
+
+        // Add everything to the window
+        frame.add(scrollPane);
+        frame.setSize(400, 300);  // Set window size
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);   // Show the window
+    }
+}
