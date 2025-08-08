@@ -1,0 +1,56 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+
+public class ImageEncryptor {
+
+    // This key is used to "lock" and "unlock" the image
+    private static final int ENCRYPTION_KEY = 123; // You can change this
+
+    public static void main(String[] args) {
+        try {
+            // Load the original image
+            File inputFile = new File("input.jpg"); // Make sure the image exists in the project folder
+            BufferedImage image = ImageIO.read(inputFile);
+
+            // Apply pixel manipulation (encryption)
+            BufferedImage encryptedImage = encryptImage(image);
+
+            // Save the encrypted image
+            ImageIO.write(encryptedImage, "jpg", new File("encrypted.jpg"));
+
+            System.out.println("Image encrypted and saved as encrypted.jpg");
+
+            // Decrypt it again (just to show the reverse works)
+            BufferedImage decryptedImage = encryptImage(encryptedImage);
+            ImageIO.write(decryptedImage, "jpg", new File("decrypted.jpg"));
+
+            System.out.println("Decrypted image saved as decrypted.jpg");
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    // Method that performs XOR on each pixel
+    private static BufferedImage encryptImage(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        BufferedImage result = new BufferedImage(width, height, image.getType());
+
+        // Go through each pixel
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int rgb = image.getRGB(x, y);
+
+                // XOR with encryption key — this changes the color but keeps it reversible
+                int encryptedRGB = rgb ^ ENCRYPTION_KEY;
+
+                result.setRGB(x, y, encryptedRGB);
+            }
+        }
+
+        return result;
+    }
+}
